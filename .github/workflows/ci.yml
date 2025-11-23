@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  php-syntax-check:
+    name: PHP syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Check PHP syntax (all .php files)
+        run: |
+          find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l || exit 1
