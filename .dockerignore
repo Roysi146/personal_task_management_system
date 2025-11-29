@@ -1,0 +1,4 @@
+.git
+backups
+node_modules
+*.log
