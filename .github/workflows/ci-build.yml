@@ -1,0 +1,28 @@
+name: CI - Build Docker
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (optional, for multi-platform)
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t personal_task_app:${{ github.sha }} .
+
+      - name: Show image size (just info)
+        run: docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | head -n 20
+
+      - name: Finish
+        run: echo "Build finished on ${{ runner.os }}"
